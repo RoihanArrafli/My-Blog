@@ -15,18 +15,22 @@ Route::get('/about', function () {
     return view('about', ['name' => 'Roihan Arrafli', 'title' => 'About Page']);
 });
 
-Route::get('/posts', [PostController::class, 'show']);
-
+Route::get('/posts', function () {
+    // $posts = Post::with(['author', 'category'])->latest()->get();
+    return view('posts', ['title' => 'Blog Page', 'posts' => Post::all()]);
+});
 Route::get('/posts/{post:slug}', function (Post $post) {
     return view('post', ['title' => 'Single Post', 'post' => $post]);
 });
 
 Route::get('/authors/{user:username}', function (User $user) {
+    // $posts = $user->post->load('author', 'category');
     return view('posts', ['title' => count($user->post) . ' Article By ' . $user->name, 'posts' => $user->post]);
 });
 
 Route::get('/categories/{categori:slug}', function (Category $categori) {
     // return dd($categori);
+    // $category = $categori->posts->load('author', 'category');
     return view('posts', [
         'title' => 'Articles in: ' . $categori->name_categori,
         'posts' => $categori->posts
